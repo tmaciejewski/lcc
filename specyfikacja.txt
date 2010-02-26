@@ -1,0 +1,104 @@
+=== Jêzyk wej¶ciowy ===
+
+<program> ::= HAI <sep> <var> <sep> <instruction>
+
+<var> ::= <var-decl> | <var-decl> <sep> <var>
+
+<var-decl> ::= I HAS <id> | I HAS <id> ITZ <number>
+
+<sep> ::= \n* | ,
+
+<number> ::= 1 | 2 | ... | 8 | 9 | <number><number>
+
+<instruction> ::= <single-instruction> | <single-instruction><sep><instruction>
+
+<single-instruction> = <io-instruction> | 
+                       <if> | 
+                       <loop> |
+                       LOL <id> IZ <expr> |
+                       GTFO |
+                       KTHXBYE
+
+<expr> ::= <number> | 
+           <id> |
+           SUM OF <expr> AN <expr> |
+           DIFF OF <expr> AN <expr> | 
+           PRODUKT OF <expr> AN <expr> |
+           QUOSHUNT OF <expr> AN <expr> |
+           MOD OF <expr> AN <expr> |
+           BIGGR OF <expr> AN <expr> |
+           SMALLR OF <expr> AN <expr>
+
+<io-instruction> ::= VISIBLE <expr> | VISIBLE "<string>" | GIMMEH <id>
+
+<string> ::= <char> | <char><string>
+
+<loop> ::= IM IN YR LOOP <sep> <instruction> <sep> IM OUTTA YR LOOP
+
+<if> ::= O RLY <condition> ? <sep> YA RLY <sep> <instruction> <sep> OIC |
+         O RLY <condition> ? <sep> YA RLY <sep> <instruction> <sep> NO WAI <sep> <instruction> <sep> OIC
+
+<condition> ::= BOTH <condition> AN <condition> |
+                EITHER <condition> AN <condition> |
+                NOT <condition> |
+                SAEM <expr> AN <expr> |
+                DIFFRINT <expr> AN <expr>
+
+Wszystkie s³owa kluczowe oraz zmienne musz± byæ zapisywane wielkimi literami.
+
+Przyk³ad instrukcji warunkowej:
+
+HAI
+I HAS X
+GIMMEH X
+VISIBLE "sprawdzmy x"
+O RLY SAEM X AN 8 ?
+   YA RLY, VISIBLE "x == 8"
+   NO WAI, VISIBLE "x != 8"
+OIC
+
+Przyk³ad pêtli (GTFO przerywa pêtlê, instrukcja LOL <id> IZ <expr> przypisuje warto¶æ wyra¿enia do identyfikatora):
+
+HAI
+I HAS SUMA
+I HAS X
+LOL X IZ 0
+LOL SUMA IZ 0
+IM IN YR LOOP
+   VISIBLE "petla"
+   LOL X IZ SUM OF X AN 1
+   LOL SUMA IZ SUM OF SUMA AN X
+   O RLY SAEM X AN 100 ?
+      YA RLY, GTFO
+   OIC
+IM OUTTA YR LOOP
+VISIBLE "suma"
+VISIBLE SUMA
+
+=== Jêzyk wyj¶ciowy ====
+
+Jêzyk wyj¶ciowy bêdzie siê sk³ada³ z ci±gu liczb ca³kowitych. Ka¿da liczba oznacza zazwyczaj jedn± instrukcjê. Niektóre instrukcje pobieraj± parametr, wiêc nastêpny z bajtów bêdzie parametrem. Interpreter bêdzie wczytywa³ kolejne bajty i wykonywa³ odpowiedni± instrukcjê. Je¶li instrukcja wymaga parametru, to wczytywany jest kolejny bajt (lub kilka bajtów).
+
+Instrukcje:
+
+push - odk³ada na stos liczbê
+add - zdejmuje dwie liczby ze stosu i odk³ada ich sumê
+sub - zdejmuje ze stosu pierwsz± liczbê, potem drug± i odejmuje od pierwszej drug± dodaj±c wynik na stos
+mul - zdejmuje dwie liczby ze stosu i odk³ada ich iloczyn
+div - zdejmuje ze stosu pierwsz± liczbê, potem drug± i dzieli (ca³kowicie) pierwsz± przez drug± dodaj±c wynik na stos
+mod - zdejmuje ze stosu pierwsz± liczbê, potem drug± i dzieli (ca³kowicie) pierwsz± przez drug± dodaj±c resztê z dzielenia na stos
+max - zdejmuje dwie liczby i odk³ada na stos wiêksz± z nich
+min - zdejmuje dwie liczby i odk³ada na stos mniejsz± z nich
+jmp - skacze do instrukcji podanej w argumencie (adres)
+jzero - zdejmuje liczbê ze stosu i je¶li jest to zero, to skacze do instrukcji podanej w adresie
+jnzero - zdejmuje liczbê ze stosu i je¶li nie jest to zero, to skacze do instrukcji podanej w adresie
+lvalue - odk³ada na stos adres zmiennej podanej w argumencie
+rvalue - odk³ada na stos warto¶æ zmiennej podanej w argumencie
+assign - zdejmuje ze stosu pierwsz± liczb±, potem drug± i pod adres bêd±cy pierwsz± liczb± wstawia warto¶æ, czyli drug± liczbê
+print - wypisuje na ekran liczbê ze stosu i j± zdejmuje
+printstring - zdejmuje ze stosu liczbê bêd±c± adresem ³añcucha znaków i wypisuje ten ³añcuch
+get - pobiera liczbê do zmiennej podanej w argumencie
+not - pobiera liczbê ze stosu, i odk³ada 1, je¶li na stosie by³o 0, w p. p. odk³ada 0
+eq  - pobiera dwie liczby ze stosu i zwraca 1, je¶li obie s± równe 0 lub obie nierówne 0, w p. p. 
+
+Zmienne s± reprezentowane jako liczby (numer zmiennej).
